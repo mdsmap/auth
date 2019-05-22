@@ -1,0 +1,136 @@
+openapi: 3.0.0
+
+info:
+  version: '0.1'
+  title: 'Auth.mdsmap.dk'
+  description: 'Auth Server for MDSMAP'
+
+paths:
+  /register:
+    post:
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        200:
+          description: successful operation
+          
+  /verify:
+    post:
+      summary: Verify newly created user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyUser'
+      responses:
+        200:
+          description: successful operation
+          
+  /sign_in:
+    post:
+      summary: Sign in to get a JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUser'
+      responses:
+        default:
+          description: successful operation     
+          
+  /forgot_password:
+    post:
+      summary: Send a reset password email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  $ref: '#/components/schemas/Email'
+      responses:
+        default:
+          description: successful operation          
+          
+  /reset_password:
+    post:
+      summary: Reset password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPassword'
+      responses:
+        default:
+          description: successful operation 
+
+
+components:
+  schemas:
+    Name:
+      type: string
+      example: 'John Doe'
+      
+    Email:
+      type: string
+      format: email
+      example: 0012345@mil.dk
+      
+    Password:
+      type: string
+      format: password
+      example: mySecretPassword
+      
+    byteToken:
+      type: string
+      format: byte
+      example: '0ae642cca75e'
+      
+      
+    NewUser:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        email:
+          $ref: '#/components/schemas/Email'
+        password:
+         $ref: '#/components/schemas/Password'
+         
+    LoginUser:
+      type: object
+      properties:
+        email:
+          $ref: '#/components/schemas/Email'
+        password:
+         $ref: '#/components/schemas/Password'
+         
+    VerifyUser:
+      type: object
+      properties:
+        email:
+          $ref: '#/components/schemas/Email'
+        password:
+         $ref: '#/components/schemas/Password'
+        verifyToken:
+         $ref: '#/components/schemas/byteToken'
+         
+    ResetPassword:
+      type: object
+      properties:
+        email:
+          $ref: '#/components/schemas/Email'
+        newPassword:
+         $ref: '#/components/schemas/Password'
+        resetToken:
+         $ref: '#/components/schemas/byteToken'
